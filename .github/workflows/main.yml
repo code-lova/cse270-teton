@@ -33,9 +33,17 @@ jobs:
           python-version: "3.12"
       - name: Install dependencies
         run: |
+          sudo apt-get update
+          sudo apt-get install -y firefox-geckodriver xvfb \
+          libgtk-3-0 libgbm-dev libasound2 libdbus-glib-1-2 libxt6 \
+          libxrender1 libx11-xcb1 libxcomposite1 libxdamage1 libxi6 \
+          libxfixes3 libxrandr2 libatk1.0-0 libcups2 libnss3 libxss1 \
+          libappindicator1 libjpeg8 libpango1.0-0
+
           python -m pip install --upgrade pip
           pip install flake8 pytest requests pytest-mock selenium requests-mock coverage
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
       - name: Lint with flake8
         run: |
           # stop the build if there are Python syntax errors or undefined names
@@ -51,7 +59,7 @@ jobs:
             ["index.html", "index.htm"]
       - name: Run tests
         run: |
-          pytest
+          xvfb-run --auto-servernum pytest
 
   analyze:
     needs: build

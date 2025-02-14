@@ -14,7 +14,9 @@ from selenium.webdriver.firefox.options import Options
 class TestSmokeTest():
   def setup_method(self, method):
     options = Options()
-    options.headless = True
+    options.add_argument("--headless")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage") 
     self.driver = webdriver.Firefox(options=options)
     self.vars = {}
   
