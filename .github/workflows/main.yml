@@ -34,11 +34,19 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y firefox-geckodriver xvfb \
-          libgtk-3-0 libgbm-dev libasound2 libdbus-glib-1-2 libxt6 \
-          libxrender1 libx11-xcb1 libxcomposite1 libxdamage1 libxi6 \
-          libxfixes3 libxrandr2 libatk1.0-0 libcups2 libnss3 libxss1 \
-          libappindicator1 libjpeg8 libpango1.0-0
+          sudo apt-get install -y firefox xvfb \
+              libgtk-3-0 libgbm-dev libasound2 \
+              libdbus-glib-1.2 libxt6 libxrender1 \
+              libx11-xcb1 libxcomposite1 libxdamage1 \
+              libxi6 libxfixes3 libxrandr2 libatk1.0-0 \
+              libcups2 libnss3 libxss1 libayatana-appindicator1 \
+              libjpeg8 libpango-1.0-0 
+              
+          GECKO_VERSION=$(curl -s https://api.github.com/repos/mozilla/geckodriver/releases/latest | grep '"tag_name"' | cut -d '"' -f 4)
+          wget "https://github.com/mozilla/geckodriver/releases/download/$GECKO_VERSION/geckodriver-$GECKO_VERSION-linux64.tar.gz"
+          tar -xzf "geckodriver-$GECKO_VERSION-linux64.tar.gz"
+          sudo mv geckodriver /usr/local/bin/
+          rm "geckodriver-$GECKO_VERSION-linux64.tar.gz"
 
           python -m pip install --upgrade pip
           pip install flake8 pytest requests pytest-mock selenium requests-mock coverage
